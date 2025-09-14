@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Running App</string>
+    <string name="first_name_error">Please enter valid first name</string>
+    <string name="last_name_error">Please enter valid last name</string>
+    <string name="dob_error">Please enter valid date of birth!</string>
+
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="dob">Date of Birth</string>
+    <string name="profile_picture">Profile Picture</string>
+    <string name="take_a_photo">Take a Photo</string>
+    <string name="register">Register</string>
+    <string name="create_account">Create Account</string>
+
+    <string name="first_name_placeholder">Enter your first name</string>
+    <string name="last_name_placeholder">Enter your last name</string>
+    <string name="dob_placeholder">Enter your date of birth</string>
+</resources>
