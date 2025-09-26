@@ -1,5 +1,6 @@
 package com.aakash.runningapp.ui.registration
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
@@ -7,19 +8,33 @@ import android.os.Build
 import android.provider.MediaStore
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.core.content.FileProvider
+import androidx.core.net.toUri
 import androidx.lifecycle.viewModelScope
 import com.aakash.runningapp.BuildConfig
+import com.aakash.runningapp.data.local.entity.UserEntity
+import com.aakash.runningapp.repository.UserRepositoryImpl
+import com.aakash.runningapp.shared_pref.SharedPrefHelperImpl
 import com.aakash.runningapp.ui.appcomponent.BaseViewModel
 import com.aakash.runningapp.util.common.ErrorState
 import com.aakash.runningapp.util.common.FormValidator
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.util.Locale
+import javax.inject.Inject
 
-class RegistrationViewModel() : BaseViewModel() {
+@HiltViewModel
+class RegistrationViewModel @Inject constructor(
+    private val userRepositoryImpl: UserRepositoryImpl,
+    private val sharedPrefHelper: SharedPrefHelperImpl,
+    @ApplicationContext private val context: Context
+
+) : BaseViewModel() {
 
     private val _registrationState = MutableStateFlow(RegistrationState())
     val registrationState = _registrationState.asStateFlow()
@@ -191,6 +206,27 @@ class RegistrationViewModel() : BaseViewModel() {
     }
 
     private fun performRegistrationWork() {
-
+        viewModelScope.launch {
+            val state = _registrationState.value
+            val pictureBytes = state.profilePicture.let { uri ->
+                val bitmap = MediaStore.Images.Media.getBitmap(context.contentResolver, uri.toUri())
+                val stream = ByteArrayOutputStream()
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 90, stream)
+                stream.toByteArray()
+            }
+            val userEntity = UserEntity(
+                fullName = state.firstName,
+                lastName = state.lastName,
+                dob = state.dob,
+                profilePicture = pictureBytes
+            )
+            val userId = userRepositoryImpl.saveUser(userEntity)
+            sharedPrefHelper.saveLoggedInUserId(userId, registrationStatus = true)
+            _registrationState.value =
+                _registrationState.value.copy(
+                    isLoading = false,
+                    isRegistrationSuccessful = true
+                )
+        }
     }
 }

@@ -11,7 +11,7 @@ val secondaryGreen = Color(0xFF64DD17)
 val nPrimary = Color(0xFFFFFFFF)
 
 // Backgrounds
-val backgroundDark = Color(0xFF0C1F16)
+val backgroundDark = Color(0xFF0E0E0E)
 val surfaceDark = Color(0xFF183427)
 
 val inputBackground = Color(0xFF234633)

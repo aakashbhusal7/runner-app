@@ -1,6 +1,11 @@
 package com.aakash.runningapp.ui.registration.ui
 
 import android.Manifest
+import android.graphics.BitmapFactory
+import android.graphics.ImageDecoder
+import android.net.Uri
+import android.os.Build
+import android.provider.MediaStore
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -25,12 +30,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.aakash.runningapp.R
 import com.aakash.runningapp.ui.registration.AlbumIntent
@@ -40,12 +47,14 @@ import com.aakash.runningapp.ui.theme.borderColor
 import com.aakash.runningapp.ui.theme.inputBackground
 import com.aakash.runningapp.ui.theme.onPrimary
 import com.aakash.runningapp.ui.theme.surfaceDark
+import java.io.File
 
 @Composable
 fun AlbumComponent(
     modifier: Modifier = Modifier,
-    viewModel: RegistrationViewModel
-) {
+    viewModel: RegistrationViewModel,
+    onImageSelected: (Uri) -> Unit,
+    ) {
 
     val albumState = viewModel.albumState.collectAsStateWithLifecycle()
 
@@ -60,6 +69,7 @@ fun AlbumComponent(
                         it
                     )
                 )
+                onImageSelected(it)
             }
         }
 

@@ -1,6 +1,7 @@
 package com.aakash.runningapp.ui.registration
 
 import android.app.DatePickerDialog
+import android.net.Uri
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -49,6 +50,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.aakash.runningapp.R
@@ -75,7 +77,7 @@ import java.util.Calendar
 fun RegistrationScreen(
     onNavigate: (UiEvent.Navigate) -> Unit,
 ) {
-    val registrationViewModel: RegistrationViewModel = viewModel()
+    val registrationViewModel: RegistrationViewModel = hiltViewModel()
 
     val registrationState by registrationViewModel.registrationState.collectAsStateWithLifecycle()
     val validationState by registrationViewModel.validationErrorState.collectAsStateWithLifecycle()
@@ -132,7 +134,7 @@ fun RegistrationScreen(
         onProfilePictureChanged = {
             registrationViewModel.handleRegistrationUiEvent(
                 RegistrationUiEvent.ProfilePictureChanged(
-                    it
+                    it.toString()
                 )
             )
         },
@@ -153,7 +155,7 @@ fun RegistrationContent(
     onFirstNameChanged: (String) -> Unit,
     onLastNameChanged: (String) -> Unit,
     onDobChanged: (Int, Int, Int) -> Unit,
-    onProfilePictureChanged: (String) -> Unit,
+    onProfilePictureChanged: (Uri) -> Unit,
     onRegisterClick: () -> Unit
 ) {
 
@@ -225,6 +227,7 @@ fun RegistrationContent(
 
                 AlbumComponent(
                     viewModel = viewModel(),
+                    onImageSelected = onProfilePictureChanged
                 )
 
                 Spacer(modifier = Modifier.height(LocalDimens.current.paddingExtraLarge))

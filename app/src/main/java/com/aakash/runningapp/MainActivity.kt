@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.animation.SharedTransitionScope
@@ -13,15 +14,21 @@ import androidx.compose.runtime.compositionLocalOf
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.aakash.runningapp.ui.navigation.RootNavHost
 import com.aakash.runningapp.ui.theme.RunningAppTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private var isAuthenticated = false
+
+    private val mainViewModel: MainActivityViewModel by viewModels()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         installSplashScreen()
-        isAuthenticated = false
+        isAuthenticated = mainViewModel.isUserAuthenticated()
+
         setContent {
             RunningAppTheme {
                 MainScreenContent(isAuthenticated)

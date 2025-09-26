@@ -75,6 +75,12 @@ dependencies {
     ksp(libs.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
 
+    //Retrofit
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.gson)
+    implementation(libs.okhttp.logging.interceptor)
+    implementation(libs.androidx.json.serialization)
+
     //CameraX
     implementation(libs.camera.core)
     implementation(libs.camera.compose)
@@ -98,6 +104,10 @@ dependencies {
     //Shared Preferences and DataStore
     implementation(libs.androidx.preferences)
     implementation(libs.androidx.datastore)
+
+    //Coil
+    implementation(libs.coil.kt.compose)
+    implementation(libs.coil.kt.svg)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
